@@ -17,7 +17,7 @@ class CommentModel
     }
 
     // Method to retrieve all comments for a specific product using its product ID
-    public function fetchCommentsByProduct($productId)
+    public function getCommentsByProduct($productId)
     {
         try 
         {

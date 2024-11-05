@@ -24,7 +24,7 @@ class CommentController
 
         try {
             // Fetch the comments using the model
-            $comments = $this->model->fetchCommentsByProduct($productId);
+            $comments = $this->model->getCommentsByProduct($productId);
 
             // Return a success response with the comments
             return ["success" => true, "comments" => $comments];

@@ -1,9 +1,9 @@
 <?php
 
-header("Access-Control-Allow-Origin: *"); // à changer
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-header("Content-Type: application/json"); // Spécifie que la réponse du serveur sera au format JSON.
+header("Content-Type: application/json"); 
 header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self';");

@@ -22,7 +22,7 @@ class ProductModel
         try 
         {
             // SQL query to select all products and join them with their categories and sections
-            $request = "SELECT product.*, categorie.name AS categorie, section.name AS section 
+            $request = "SELECT product.*, categorie.name AS categorie, section.name AS section
                         FROM product 
                         JOIN categorie ON product.categorie_id = categorie.id 
                         JOIN section ON product.section_id = section.id";

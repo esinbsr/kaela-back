@@ -33,7 +33,6 @@ RewriteRule ^updateProduct$ index.php?adminAction=updateProduct [L,QSA]
 # URL rewriting for delete products (admin)
 RewriteRule ^deleteProduct/([0-9]+)$ index.php?adminAction=deleteProduct&productId=$1 [L,QSA]
 
-
 # ADMIN - CATEGORIES -------------------------------------------------------
 
 # URL rewriting for get product categories (admin)
@@ -51,13 +50,10 @@ RewriteRule ^updateCategory$ index.php?adminAction=updateCategory [L,QSA]
 # URL rewriting for deleting a category by id (admin)
 RewriteRule ^deleteCategory/([0-9]+)$ index.php?adminAction=deleteCategory&categoryId=$1 [L,QSA]
 
-
-
-# ADMIN - SECTIONS  -------------------------------------------------------
+# ADMIN - SECTIONS -------------------------------------------------------
 
 # URL rewriting for get product section (admin)
 RewriteRule ^getSection$ index.php?adminAction=getSection [L,QSA]
-
 
 # ADMIN - INFORMATIONS -------------------------------------------------------
 
@@ -76,12 +72,10 @@ RewriteRule ^updateInformation$ index.php?adminAction=updateInformation [L,QSA]
 # URL rewriting for delete informations (admin)
 RewriteRule ^deleteInformation/([0-9]+)$ index.php?adminAction=deleteInformation&informationId=$1 [L,QSA]
 
-
 # ADMIN - SOCIAL NETWORKS -------------------------------------------------------
 
 # URL rewriting for get social network (admin)
 RewriteRule ^getSocialNetwork$ index.php?adminAction=getSocialNetwork [L,QSA]
-
 
 # URL rewriting for get social network by id (admin)
 RewriteRule ^getSocialNetworkById/([0-9]+)$ index.php?adminAction=getSocialNetworkById&socialNetworkId=$1 [L,QSA]
@@ -89,13 +83,11 @@ RewriteRule ^getSocialNetworkById/([0-9]+)$ index.php?adminAction=getSocialNetwo
 # URL rewriting for add social network (admin)
 RewriteRule ^addSocialNetwork$ index.php?adminAction=addSocialNetwork [L,QSA]
 
-
 # URL rewriting for update social network (admin)
 RewriteRule ^updateSocialNetwork$ index.php?adminAction=updateSocialNetwork [L,QSA]
 
 # URL rewriting for delete social network (admin)
-RewriteRule ^deleteSocialNetwork/([0-9]+)$  index.php?adminAction=deleteSocialNetwork&socialNetworkId=$1 [L,QSA]
-
+RewriteRule ^deleteSocialNetwork/([0-9]+)$ index.php?adminAction=deleteSocialNetwork&socialNetworkId=$1 [L,QSA]
 
 # ADMIN - COMMENTS -------------------------------------------------------
 
@@ -104,3 +96,5 @@ RewriteRule ^getCommentsByProduct/([0-9]+)$ index.php?action=getCommentsByProduc
 
 # URL rewriting for add comment (admin)
 RewriteRule ^addComment$ index.php?action=addComment [L,QSA]
+
+# ----------------------------------------------------------------------------- 

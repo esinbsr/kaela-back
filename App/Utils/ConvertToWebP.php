@@ -9,7 +9,7 @@ class ConvertToWebP
         if ($image !== false) 
         {
 
-            $finalImage = $this->resizeAndCropImage($image, 900, 1200);
+            $finalImage = $this->resizeAndCropImage($image, 720, 960);
             if ($finalImage === false) {
                 return false;
             }
