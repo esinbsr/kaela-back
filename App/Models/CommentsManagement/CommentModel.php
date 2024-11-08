@@ -19,8 +19,7 @@ class CommentModel
     // Method to retrieve all comments for a specific product using its product ID
     public function getCommentsByProduct($productId)
     {
-        try 
-        {
+        try {
             // SQL query to select comments for the specified product ID
             // The query joins the 'comment' table with the 'user' table to get the username
             $request = "SELECT 
@@ -29,18 +28,17 @@ class CommentModel
             comment.user_id 
             FROM comment 
             LEFT JOIN user ON comment.user_id = user.id 
-            WHERE comment.product_id = ?"; 
-            
+            WHERE comment.product_id = ?
+            AND is_archived = 0 ORDER BY created_at DESC
+            ";
+
             $pdo = $this->db->prepare($request);
-            $pdo->execute([$productId]); 
+            $pdo->execute([$productId]);
             $comments = $pdo->fetchAll(\PDO::FETCH_ASSOC);
 
             // Return the list of comments
             return $comments;
-
-        } 
-        catch (\PDOException $e) 
-        {
+        } catch (\PDOException $e) {
             // Throw an exception if an error occurs
             throw new \Exception("Database error: " . $e->getMessage());
         }

@@ -10,6 +10,8 @@ require_once 'routes/sectionRoutes.php';
 
 use Controllers\CommentsManagement\AddCommentController;
 use Controllers\CommentsManagement\CommentController;
+use Controllers\CommentsManagement\DeleteCommentController;
+use Controllers\CommentsManagement\UpdateCommentController;
 use Controllers\ContactController;
 use Controllers\LoginController;
 use Controllers\SignupController;
@@ -22,7 +24,8 @@ $login = new LoginController();
 $contact = new ContactController();
 $comment = new CommentController();
 $addComment = new AddCommentController();
-
+$updateComment = new UpdateCommentController();
+$deleteComment = new DeleteCommentController();
 $action = $_REQUEST['action'] ?? null;
 $response = ["success" => false, "message" => "Action not found"];
 
@@ -54,6 +57,16 @@ switch ($action)
 
     case "addComment":
         $response = $addComment->addComment();
+        break;
+
+    case "updateComment":
+        $userId = $authMiddleware->getUserIdFromToken();
+        $response = $updateComment->updateComment($userId);
+        break;
+        
+    case "deleteComment":
+        $userId = $authMiddleware->getUserIdFromToken();
+        $response = $deleteComment->deleteComment($userId);
         break;
 
     // Managing admin actions

@@ -97,4 +97,10 @@ RewriteRule ^getCommentsByProduct/([0-9]+)$ index.php?action=getCommentsByProduc
 # URL rewriting for add comment (admin)
 RewriteRule ^addComment$ index.php?action=addComment [L,QSA]
 
+# URL rewriting for update comment (admin)
+RewriteRule ^updateComment$ index.php?action=updateComment [L,QSA]
+
+# URL rewriting for delete comment(admin)
+RewriteRule ^deleteComment/([0-9]+)$ index.php?action=deleteComment&commentId=$1 [L,QSA]
+
 # ----------------------------------------------------------------------------- 
