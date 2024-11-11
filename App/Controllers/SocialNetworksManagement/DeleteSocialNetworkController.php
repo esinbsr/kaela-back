@@ -20,22 +20,27 @@ class DeleteSocialNetworkController
         $socialNetworkId = isset($_GET['socialNetworkId']) ? strip_tags($_GET['socialNetworkId']) : null;
 
         // Check if the ID is missing
-        if (empty($socialNetworkId)) 
-        {
+        if (empty($socialNetworkId)) {
+            http_response_code(400); // Bad request
             return ["success" => false, "message" => "Social network ID is missing"];
         }
 
-        // Use the model to delete the social network
-        $rowCount = $this->model->deleteSocialNetwork($socialNetworkId);
-
-        // Prepare the response based on the result from the model
-        if ($rowCount > 0) 
-        {
-            return ["success" => true, "message" => "Social network deleted successfully"];
-        } 
-        else 
-        {
-            return ["success" => false, "message" => "Social network not found"];
+        try {
+            // Call the model to delete a social network by ID 
+            $isDeleted = $this->model->deleteSocialNetwork($socialNetworkId);
+            // Check if any row was affected (social network deleted successfully)
+            if ($isDeleted > 0) {
+                http_response_code(200); // OK
+                return ["success" => true, "message" => "Social network deleted successfully."];
+                // No rows affected means the social network was not found
+            } else {
+                http_response_code(404); // Not found
+                return ["success" => false, "message" => "Social network not found"];
+            }
+        } catch (\PDOException) {
+            // Catch any database error, set HTTP response code to 500, and return an error message
+            http_response_code(500); // Internal server error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 }

@@ -1,7 +1,6 @@
 {
     "name": "esin/kaela-couture",
     "description": "Showcase website for the Kaela Couture brand, specializing in haute couture and custom clothing.",
-    "license": "4",
     "autoload": {
         "psr-4": {
             "App\\": "App/",

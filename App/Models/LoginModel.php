@@ -11,8 +11,8 @@ class LoginModel
     // Initializes the database connection
     public function __construct()
     {
-        $database = new Database(); 
-        $this->db = $database->getConnection(); 
+        $database = new Database();
+        $this->db = $database->getConnection();
     }
 
     // Method to retrieve the user by email from the database

@@ -19,32 +19,19 @@ class UpdateProductModel
     // Method to retrieve a product by its ID
     public function getProduct($productId)
     {
-        try 
-        {
-            $request = "SELECT * FROM product WHERE id = ?";
-            $pdo = $this->db->prepare($request);
-            $pdo->execute([$productId]);
-            return $pdo->fetch(\PDO::FETCH_ASSOC);
-        } 
-        catch (\PDOException $e) 
-        {
-            throw new \Exception("Database error: " . $e->getMessage());
-        }
-    }
 
+        $request = "SELECT * FROM product WHERE id = ?";
+        $pdo = $this->db->prepare($request);
+        $pdo->execute([$productId]);
+        return $pdo->fetch(\PDO::FETCH_ASSOC);
+    }
     // Method to update a product in the database
     public function updateProduct($productId, $productName, $productDescription, $imagePath, $productSlug, $productCategory, $productSection)
     {
-        try 
-        {
-            $request = "UPDATE product SET name = ?, description = ?, path = ?, slug = ?, categorie_id = ?, section_id = ? WHERE id = ?";
-            $pdo = $this->db->prepare($request);
-            $pdo->execute([$productName, $productDescription, $imagePath, $productSlug, $productCategory, $productSection, $productId]);
-        } 
-        catch (\PDOException $e) 
-        {
-            throw new \Exception("Database error: " . $e->getMessage());
-        }
+
+        $request = "UPDATE product SET name = ?, description = ?, path = ?, slug = ?, categorie_id = ?, section_id = ? WHERE id = ?";
+        $pdo = $this->db->prepare($request);
+        $pdo->execute([$productName, $productDescription, $imagePath, $productSlug, $productCategory, $productSection, $productId]);
     }
 
     // Method to check if a product name already exists for another product

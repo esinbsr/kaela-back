@@ -5,7 +5,7 @@ namespace Controllers\CategoriesManagement;
 use Models\CategoriesManagement\AddCategoryModel;
 use Lib\Slug;
 
-class AddCategoryController 
+class AddCategoryController
 {
     protected $model;
     protected $slug;
@@ -31,8 +31,8 @@ class AddCategoryController
         $pageDescription = isset($data['categoryPageDescription']) ? trim(strip_tags($data['categoryPageDescription'])) : null;
 
         // Check if any required fields are missing
-        if (empty($categoryName) || empty($description) || empty($pageTitle) || empty($pageDescription)) 
-        {
+        if (empty($categoryName) || empty($description) || empty($pageTitle) || empty($pageDescription)) {
+            http_response_code(400); // Bad Request
             return ["success" => false, "message" => "Please complete all fields"];
         }
 
@@ -40,19 +40,18 @@ class AddCategoryController
         $categoryNameSlug = $this->slug->sluguer($categoryName);
 
         // Check if the category name already exists in the database
-        if ($this->model->nameExist($categoryName)) 
-        {
+        if ($this->model->nameExist($categoryName)) {
+            http_response_code(409); // Conflict
             return ["success" => false, "message" => "This name is already used"];
         }
 
-        try 
-        {
+        try {
             // Save the new category to the database using the model
-            $categoryId = $this->model->addCategory($categoryName, $description, $pageTitle, $pageDescription, $categoryNameSlug);
+            $id = $this->model->addCategory($categoryName, $description, $pageTitle, $pageDescription, $categoryNameSlug);
 
             // Prepare the new category data to return in the response
             $newCategory = [
-                'id' => $categoryId,
+                'id' => $id,
                 'name' => $categoryName,
                 'description' => $description,
                 'page_title' => $pageTitle,
@@ -61,13 +60,16 @@ class AddCategoryController
             ];
 
             // Return a success response with the new category data
-            return ["success" => true, "message" => "Category added successfully!!!", "category" => $newCategory];
-
-        } 
-        catch (\Exception $e) 
-        {
+            http_response_code(201); // Created
+            return [
+                "success" => true,
+                "message" => "Category added successfully.",
+                "category" => $newCategory
+            ];
+        } catch (\Exception) {
             // Return a failure response
-            return ["success" => false, "message" => $e->getMessage()];
+            http_response_code(500); // Internal Server Error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 }

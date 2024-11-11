@@ -28,6 +28,7 @@ class UpdateSocialNetworkModel
     // Method to update a social network entry
     public function updateSocialNetwork($socialNetworkId, $platform, $url)
     {
+        // Sql request to update data
         $request = "UPDATE social_network SET platform = ?, url = ? WHERE id = ?";
         $pdo = $this->db->prepare($request);
         $pdo->execute([$platform, $url, $socialNetworkId]);

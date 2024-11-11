@@ -91,16 +91,16 @@ RewriteRule ^deleteSocialNetwork/([0-9]+)$ index.php?adminAction=deleteSocialNet
 
 # ADMIN - COMMENTS -------------------------------------------------------
 
-# URL rewriting for get comment (admin)
+# URL rewriting for get comment
 RewriteRule ^getCommentsByProduct/([0-9]+)$ index.php?action=getCommentsByProduct&productDetailId=$1 [L,QSA]
 
-# URL rewriting for add comment (admin)
+# URL rewriting for add comment 
 RewriteRule ^addComment$ index.php?action=addComment [L,QSA]
 
-# URL rewriting for update comment (admin)
+# URL rewriting for update comment
 RewriteRule ^updateComment$ index.php?action=updateComment [L,QSA]
 
-# URL rewriting for delete comment(admin)
+# URL rewriting for delete comment
 RewriteRule ^deleteComment/([0-9]+)$ index.php?action=deleteComment&commentId=$1 [L,QSA]
 
 # ----------------------------------------------------------------------------- 

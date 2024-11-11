@@ -92,4 +92,3 @@ class ConvertToWebP
         return $finalImage;
     }
 }
-

@@ -19,18 +19,9 @@ class CategoryModel
     // Method to retrieve all categories from the database
     public function getCategories()
     {
-        try 
-        {
-            // SQL query to select all categories
-            $request = "SELECT * FROM categorie";
-            $pdo = $this->db->query($request);
-            return $pdo->fetchAll(\PDO::FETCH_ASSOC); 
-
-        } 
-        catch (\PDOException $e) 
-        {
-            // Throw an exception to handle in the controller
-            throw new \Exception("Database error: " . $e->getMessage());
-        }
+        // SQL query to select all categories
+        $request = "SELECT * FROM categorie";
+        $pdo = $this->db->query($request);
+        return $pdo->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

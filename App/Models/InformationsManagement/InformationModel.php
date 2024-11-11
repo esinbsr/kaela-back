@@ -17,19 +17,9 @@ class InformationModel
 
     // Method to retrieve all information from the database
     public function getInformations()
-    {
-        try 
-        {
-            // SQL query to select all data
-            $request = "SELECT * FROM information";
-            $pdo = $this->db->query($request);
-            return $pdo->fetchAll(\PDO::FETCH_ASSOC);
-
-        } 
-        catch (\PDOException $e) 
-        {
-            // Return a failure response
-            return ["success" => false, "message" => "Database error"];
-        }
+    { // SQL query to select all informations
+        $request = "SELECT * FROM information";
+        $pdo = $this->db->query($request);
+        return $pdo->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

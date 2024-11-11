@@ -27,36 +27,39 @@ class AddCommentController
         $productId = isset($data['productId']) ? strip_tags($data['productId']) : null;
 
         // Check if any required fields are missing
-        if (!$content || !$userId || !$productId) 
-        {
+        if (!$content || !$userId || !$productId) {
+            http_response_code(400); // Bad Request
             return ["success" => false, "message" => "Missing required fields"];
         }
 
-        try 
-        {
+        try {
             // Save the comment using the model
             $commentId = $this->model->addComment($content, $userId, $productId);
 
             // Fetch the username of the user who added the comment
             $user = $this->model->getUsernameById($userId);
-
-            // Prepare the comment data to return in the response
-            $comment = [
-                'id' => $commentId,
-                'content' => $content,
-                'user_id' => $userId,
-                'product_id' => $productId,
-                'username' => $user['username']
-            ];
+            if (!$user) {
+                http_response_code(404); // Not Found
+                return ["success" => false, "message" => "User not found"];
+            }
 
             // Return a success response with the comment data
-            return ["success" => true, "message" => "Comment added successfully!", "comment" => $comment];
-
-        } 
-        catch (\Exception $e) 
-        {
-            // Return a failure response if an error occurs
-            return ["success" => false, "message" => $e->getMessage()];
+            http_response_code(201); // Created
+            return [
+                "success" => true,
+                "message" => "Comment added successfully.",
+                "comment" => [
+                    "id" => $commentId,
+                    "content" => $content,
+                    "user_id" => $userId,
+                    "username" => $user['username'],
+                    "product_id" => $productId
+                ]
+            ];
+        } catch (\Exception) {
+            // Return a failure response
+            http_response_code(500); // Internal Server Error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 }

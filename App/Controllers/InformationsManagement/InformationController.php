@@ -17,18 +17,19 @@ class InformationController
     // Method to get information data
     public function getInformations()
     {
-        try 
-        {
+        try {
             // Fetch the informations from the model
             $information = $this->model->getInformations();
-
+            // Set HTTP response code to 200 OK to indicate a successful request
+            http_response_code(200);
             // Return the list of informations with a success response
             return ["success" => true, "information" => $information];
-        }
-        catch (\Exception $e) 
-        {
+        } catch (\PDOException) {
             // Return a failure response
-            return ["success" => false, "message" => $e->getMessage()];
+            http_response_code(500);
+
+            // Return an error response with a message indicating a database error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 }

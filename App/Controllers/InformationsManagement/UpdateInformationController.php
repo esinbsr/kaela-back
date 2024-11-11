@@ -4,7 +4,7 @@ namespace Controllers\InformationsManagement;
 
 use Models\InformationsManagement\UpdateInformationModel;
 
-class UpdateInformationController 
+class UpdateInformationController
 {
     protected $model;
 
@@ -14,88 +14,102 @@ class UpdateInformationController
         $this->model = new UpdateInformationModel();
     }
 
-    // Method to get information by its ID
+    // Method to get information by ID
     public function getInformationById()
     {
-        $informationId = isset($_GET['informationId']) ? $_GET['informationId'] : null;
+        // Retrieve and sanitize information ID
+        $informationId = isset($_GET['informationId']) ? strip_tags($_GET['informationId']) : null;
 
-        if (empty($informationId)) 
-        {
+        if (empty($informationId)) {
+            http_response_code(400); // Bad Request
             return ["success" => false, "message" => "Information ID missing"];
         }
 
-        // Fetch the information by its ID using the model
-        $information = $this->model->getInformationById($informationId);
+        try {
+            // Fetch the information by ID using the model
+            $information = $this->model->getInformationById($informationId);
 
-        if ($information) 
-        {
-            // If data is available, return it
-            return ["success" => true, "information" => $information];
-        } 
-        else 
-        {
-            return ["success" => false, "message" => "Information not found"];
+            if ($information) {
+                http_response_code(200); // OK
+                return ["success" => true, "information" => $information];
+            } else {
+                http_response_code(404); // Not Found
+                return ["success" => false, "message" => "Information not found"];
+            }
+        } catch (\PDOException $e) {
+            http_response_code(500); // Internal Server Error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 
     // Method to handle updating information
     public function updateInformation()
     {
-        // Retrieve the input data from the HTTP request and decode it from JSON
+        // Retrieve and decode input data from JSON
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
 
-        // Sanitize and retrieve the informations details from the input data
+        // Sanitize and retrieve the information details from input data
         $informationId = isset($data['id']) ? strip_tags($data['id']) : null;
         $description = isset($data['description']) ? trim(strip_tags($data['description'])) : null;
         $mobile = isset($data['mobile']) ? trim(strip_tags($data['mobile'])) : null;
         $email = isset($data['email']) ? filter_var($data['email'], FILTER_SANITIZE_EMAIL) : null;
         $address = isset($data['address']) ? trim(strip_tags($data['address'])) : null;
 
-        // Check if any required fields are missing
-        if (empty($mobile) && empty($description) && empty($email) && empty($address)) 
-        {
-            return ["success" => false, "message" => "At least one field must be filled"];
+        // Ensure information ID and at least one other field is provided
+        if (empty($informationId) || (empty($description) && empty($mobile) && empty($email) && empty($address))) {
+            http_response_code(400); // Bad Request
+            return ["success" => false, "message" => "Information ID and at least one field must be filled"];
         }
 
-       
-        // Validate the email format only if email is not empty
-        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) 
-        {
-            return ["success" => false, "message" => "Invalid email"];
+        // Validate email format if provided
+        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            http_response_code(400); // Bad Request
+            return ["success" => false, "message" => "Invalid email format"];
         }
 
-
-        // Check that the telephone number is in the correct format
-        if (!empty($mobile) && !preg_match('/^\+?[0-9]*$/', $mobile)) 
-        {
+        // Validate mobile number format if provided
+        if (!empty($mobile) && !preg_match('/^\+?[0-9]*$/', $mobile)) {
+            http_response_code(400); // Bad Request
             return ["success" => false, "message" => "Invalid mobile number format"];
         }
 
-        try 
-        {
-            $existingInformation = $this->model->getInformationById($informationId);
+        // Check if information exists in the database
+        $existingInformation = $this->model->getInformationById($informationId);
 
-            if ($description == $existingInformation['description'] && $mobile == $existingInformation['mobile'] && $email == $existingInformation['email'] && $address == $existingInformation['address']) 
-            {
-                return ["success" => false, "message" => "No changes detected"];
+        if (!$existingInformation) {
+            http_response_code(404); // Not Found
+            return ["success" => false, "message" => "Information not found"];
+        }
+
+        // Check if any updates are needed
+        if (
+            $description === $existingInformation['description'] &&
+            $mobile === $existingInformation['mobile'] &&
+            $email === $existingInformation['email'] &&
+            $address === $existingInformation['address']
+        ) {
+            http_response_code(400); // Bad Request
+            return ["success" => false, "message" => "No changes detected"];
+        }
+
+        try {
+            // Update the information in the model
+            $rowCount = $this->model->updateInformation($informationId, $description, $mobile, $email, $address);
+
+            if ($rowCount > 0) {
+                http_response_code(200); // OK
+                return [
+                    "success" => true,
+                    "message" => "Information updated successfully",
+                ];
+            } else {
+                http_response_code(400); // No updates made
+                return ["success" => false, "message" => "No updates made"];
             }
-
-            // Update the information using the model
-            $updatedRows = $this->model->updateInformation($informationId, $description, $mobile, $email, $address);
-
-            if ($updatedRows > 0) 
-            {
-                return ["success" => true, "message" => "Information updated successfully"];
-            } 
-            else 
-            {
-                return ["success" => false, "message" => "Update failed or no changes detected"];
-            }
-        } 
-        catch (\Exception $e) 
-        {
-            return ["success" => false, "message" => $e->getMessage()];
+        } catch (\PDOException) {
+            http_response_code(500); // Internal Server Error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 }

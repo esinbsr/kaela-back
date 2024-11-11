@@ -21,8 +21,7 @@ class DeleteProductController
         $productId = isset($_GET['productId']) ? strip_tags($_GET['productId']) : null;
 
         // If the product ID is missing, return an error response
-        if (empty($productId))
-        {
+        if (empty($productId)) {
             return ["success" => false, "message" => "Product ID missing"];
         }
 
@@ -30,8 +29,7 @@ class DeleteProductController
         $product = $this->model->getProductImagePath($productId);
 
         // If the product is not found, return an error response
-        if (!$product) 
-        {
+        if (!$product) {
             return ["success" => false, "message" => "Product not found"];
         }
 
@@ -42,19 +40,15 @@ class DeleteProductController
         $isDeleted = $this->model->deleteProduct($productId);
 
         // Check if the product was successfully deleted
-        if ($isDeleted) 
-        {
+        if ($isDeleted) {
             // If the image file exists, delete it from the file system
-            if (file_exists($imagePath)) 
-            {
+            if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
 
             // Return a success response if the product was deleted
-            return ["success" => true, "message" => "Product deleted successfully!!!"];
-        } 
-        else 
-        {
+            return ["success" => true, "message" => "Product deleted successfully."];
+        } else {
             // Return an error if the product was not found or deleted
             return ["success" => false, "message" => "Product not found"];
         }

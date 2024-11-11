@@ -4,7 +4,7 @@ namespace Controllers\CommentsManagement;
 
 use Models\CommentsManagement\CommentModel;
 
-class CommentController 
+class CommentController
 {
     protected $model;
 
@@ -26,12 +26,16 @@ class CommentController
             // Fetch the comments using the model
             $comments = $this->model->getCommentsByProduct($productId);
 
+            // Set HTTP response code to 200 OK to indicate a successful request
+            http_response_code(200);
             // Return a success response with the comments
             return ["success" => true, "comments" => $comments];
+        } catch (\PDOException) {
+            // Return a failure response
+            http_response_code(500);
 
-        } catch (\Exception $e) {
-            // Return a failure response in case of error
-            return ["success" => false, "message" => $e->getMessage()];
+            // Return an error response with a message indicating a database error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 }

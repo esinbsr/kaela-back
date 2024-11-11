@@ -4,20 +4,11 @@ namespace Utils;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Dotenv\Dotenv;
 
 // This class handles user authentication and role-based access control using JWT tokens
 // Cette classe gère l'authentification des utilisateurs et le contrôle d'accès basé sur les rôles en utilisant des tokens JWT
 class AuthUtils
 {
-    public function __construct()
-    {
-        // Loads environment variables (like the JWT secret key) from the .env file
-        // Charge les variables d'environnement (comme la clé secrète JWT) depuis le fichier .env
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
-        $dotenv->load();
-    }
-
     // Extracts the JWT token from the 'Authorization' header of the HTTP request
     // Returns the token without the 'Bearer' prefix or null if the token is not present
     // Extrait le token JWT de l'en-tête 'Authorization' de la requête HTTP
@@ -59,8 +50,7 @@ class AuthUtils
             // Returns the user ID from the token
             // Retourne l'ID utilisateur depuis le token
             return $decoded->user_id;
-
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // If any error occurs during token decoding, return a 401 Unauthorized response
             // Si une erreur survient lors du décodage du token, retourne une réponse 401 Unauthorized
             http_response_code(401);
@@ -76,39 +66,33 @@ class AuthUtils
 
         // If no token is found, return a 401 Unauthorized response
         // Si aucun token n'est trouvé, retourne une réponse 401 Unauthorized
-        if (!$token) 
-        {
+        if (!$token) {
             http_response_code(401);
             return ["success" => false, "message" => "Unauthorised access."];
         }
 
-        try 
-        {
+        try {
             // Decodes the JWT token using the secret key from the environment variables
             // Décode le token JWT en utilisant la clé secrète des variables d'environnement
             $decoded = JWT::decode($token, new Key($_ENV['JWT_SECRET_KEY'], 'HS256'));
 
             // Checks if the token has expired. If expired, return a 401 Unauthorized response
             // Vérifie si le token a expiré. Si expiré, retourne une réponse 401 Unauthorized
-            if ($decoded->exp < time()) 
-            {
+            if ($decoded->exp < time()) {
                 http_response_code(401);
                 return ["success" => false, "message" => "Token expired."];
             }
 
             // Retrieves the user role from the token and checks if it matches the required role
             // Récupère le rôle utilisateur depuis le token et vérifie s'il correspond au rôle requis
-            if (strtolower($decoded->role) !== strtolower($requiredRole)) 
-            {
+            if (strtolower($decoded->role) !== strtolower($requiredRole)) {
                 http_response_code(403);
                 return ["success" => false, "message" => "Insufficient rights."];
             }
 
             return null; // Access granted, no error returned
             // Accès accordé, aucune erreur retournée
-        } 
-        catch (\Exception $e) 
-        {
+        } catch (\Exception) {
             // If any error occurs during token decoding, return a 401 Unauthorized response
             // Si une erreur survient lors du décodage du token, retourne une réponse 401 Unauthorized
             http_response_code(401);

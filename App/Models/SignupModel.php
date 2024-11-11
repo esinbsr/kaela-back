@@ -4,7 +4,7 @@ namespace Models;
 
 use App\Database;
 
-class SignupModel 
+class SignupModel
 {
     protected $db;
 

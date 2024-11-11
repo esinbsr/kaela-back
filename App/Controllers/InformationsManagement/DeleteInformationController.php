@@ -4,7 +4,7 @@ namespace Controllers\InformationsManagement;
 
 use Models\InformationsManagement\DeleteInformationModel;
 
-class DeleteInformationController 
+class DeleteInformationController
 {
     protected $model;
 
@@ -21,30 +21,27 @@ class DeleteInformationController
         $informationId = isset($_GET['informationId']) ? strip_tags($_GET['informationId']) : null;
 
         // Check if the ID is missing
-        if (empty($informationId)) 
-        {
+        if (empty($informationId)) {
+            http_response_code(400); // Bad request
             return ["success" => false, "message" => "Information ID missing"];
         }
 
-        try 
-        {
+        try {
             // Calls the model to delete the information by its ID
-            $deleted = $this->model->deleteInformationById($informationId);
+            $rowCount = $this->model->deleteInformationById($informationId);
 
             // Returns a response based on the success or failure of the deletion
-            if ($deleted) 
-            {
-                return ["success" => true, "message" => "Information deleted successfully"];
-            } 
-            else 
-            {
+            if ($rowCount > 0) {
+                return ["success" => true, "message" => "Information deleted successfully."];
+                // No rows affected means the information was not found
+            } else {
+                http_response_code(404); // Not found
                 return ["success" => false, "message" => "Information not found"];
             }
-        } 
-        catch (\Exception $e) 
-        {
+        } catch (\Exception) {
             // Handles errors and returns a failure response
-            return ["success" => false, "message" => $e->getMessage()];
+            http_response_code(500);
+            return ["success" => false, "message" => "Database error"];
         }
     }
 }

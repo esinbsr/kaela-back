@@ -16,23 +16,28 @@ class UpdateSocialNetworkController
     // Method to retrieve a social network by ID
     public function getSocialNetworkById()
     {
+        // Check if id is present in the GET request parameters
         $socialNetworkId = isset($_GET['socialNetworkId']) ? strip_tags($_GET['socialNetworkId']) : null;
 
         // Validate input
-        if (empty($socialNetworkId)) 
-        {
+        if (empty($socialNetworkId)) {
+            http_response_code(400); // Bad request
             return ["success" => false, "message" => "Social network ID is missing"];
         }
 
-        $socialNetwork = $this->model->getSocialNetworkById($socialNetworkId);
+        try {
+            // Call the model to retrieve the id
+            $socialNetwork = $this->model->getSocialNetworkById($socialNetworkId);
 
-        if ($socialNetwork) 
-        {
-            return ["success" => true, "socialNetwork" => $socialNetwork];
-        } 
-        else 
-        {
-            return ["success" => false, "message" => "Social network not found"];
+            if ($socialNetwork) {
+                return ["success" => true, "socialNetwork" => $socialNetwork];
+            } else {
+                return ["success" => false, "message" => "Social network not found"];
+            }
+        } catch (\PDOException) {
+            // Return a failure response 
+            http_response_code(500); // Internal server error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 
@@ -43,50 +48,59 @@ class UpdateSocialNetworkController
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
 
+        // Sanitize and validate the input fields
         $socialNetworkId = isset($data['id']) ? trim(strip_tags($data['id'])) : null;
         $platform = isset($data['platform']) ? trim(strip_tags($data['platform'])) : null;
         $url = isset($data['url']) ? trim(strip_tags($data['url'])) : null;
 
         // Validate input
-        if (empty($socialNetworkId) || empty($platform) || empty($url)) 
-        {
+        if (empty($socialNetworkId) || empty($platform) || empty($url)) {
+            http_response_code(400); // Bad request
             return ["success" => false, "message" => "All fields must be filled"];
         }
 
         // Check if the URL is valid
-        if (!filter_var($url, FILTER_VALIDATE_URL)) 
-        {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            http_response_code(400); // Bad request
             return ["success" => false, "message" => "Invalid URL"];
         }
 
         // Fetch the existing social network data
         $existingSocialNetwork = $this->model->getSocialNetworkById($socialNetworkId);
 
-        // Check if any changes were made
-        if ($existingSocialNetwork['platform'] === $platform && $existingSocialNetwork['url'] === $url) 
-        {
+        // Check if the social network exists
+        if (!$existingSocialNetwork) {
+            http_response_code(404); // Not Found
+            return ["success" => false, "message" => "Social network not found"];
+        }
+
+        if (
+            $platform == $existingSocialNetwork['platform'] &&
+            $url == $existingSocialNetwork['url']
+        ) {
+            http_response_code(400); // Bad Request
             return ["success" => false, "message" => "No changes detected"];
         }
 
-        // Update the social network using the model
-        $rowCount = $this->model->updateSocialNetwork($socialNetworkId, $platform, $url);
+        try {
+            // Update the social network using the model
+            $rowCount = $this->model->updateSocialNetwork($socialNetworkId, $platform, $url);
 
-        // Send my data back to the front if a line is affected
-        if ($rowCount > 0) 
-        {
-            return [
-                "success" => true,
-                "message" => "Social network updated successfully",
-                "socialNetwork" => [
-                    'id' => $socialNetworkId,
-                    'platform' => $platform,
-                    'url' => $url,
-                ]
-            ];
-        } 
-        else 
-        {
-            return ["success" => false, "message" => "No updates made"];
+            // Send updated data back if a row was affected
+            if ($rowCount > 0) {
+                http_response_code(200); // OK
+                return [
+                    "success" => true,
+                    "message" => "Social network updated successfully",
+                ];
+            } else {
+                http_response_code(400); // Bad Request 
+                return ["success" => false, "message" => "No updates made"];
+            }
+        } catch (\PDOException) {
+            // Return a failure response 
+            http_response_code(500); // Internal server error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 }

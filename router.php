@@ -1,7 +1,14 @@
 <?php
 
-require_once 'vendor/autoload.php';
+require_once 'vendor/autoload.php'; // Load Composer's autoloader for dependencies
 
+use Dotenv\Dotenv;
+
+// Initialize and load environment variables from .env file
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// Include route files for different resources
 require_once 'routes/productRoutes.php';
 require_once 'routes/categoryRoutes.php';
 require_once 'routes/informationRoutes.php';
@@ -17,8 +24,10 @@ use Controllers\LoginController;
 use Controllers\SignupController;
 use Utils\AuthUtils;
 
+// Initialize the authentication middleware
 $authMiddleware = new AuthUtils();
 
+// Instantiate controllers for handling different user actions
 $signup = new SignupController();
 $login = new LoginController();
 $contact = new ContactController();
@@ -26,12 +35,11 @@ $comment = new CommentController();
 $addComment = new AddCommentController();
 $updateComment = new UpdateCommentController();
 $deleteComment = new DeleteCommentController();
-$action = $_REQUEST['action'] ?? null;
-$response = ["success" => false, "message" => "Action not found"];
+$action = $_REQUEST['action'] ?? null; // Get the action from request parameters
+$response = ["success" => false, "message" => "Action not found"]; // Default response for unrecognized actions
 
-// Management of non-admin actions
-switch ($action) 
-{
+// Management of non-admin actions based on the provided action parameter
+switch ($action) {
     case "signup":
         $response = $signup->signup();
         break;
@@ -46,11 +54,9 @@ switch ($action)
 
     case "getCommentsByProduct":
         $productId = $_REQUEST['productDetailId'] ?? null;
-        if ($productId) 
-        {
+        if ($productId) {
             $response = $comment->getCommentsByProduct($productId);
-        } else 
-        {
+        } else {
             $response = ["success" => false, "message" => "Product ID not provided"];
         }
         break;
@@ -63,18 +69,18 @@ switch ($action)
         $userId = $authMiddleware->getUserIdFromToken();
         $response = $updateComment->updateComment($userId);
         break;
-        
+
     case "deleteComment":
         $userId = $authMiddleware->getUserIdFromToken();
         $response = $deleteComment->deleteComment($userId);
         break;
 
-    // Managing admin actions
+        // Handling admin actions if a specific admin action is requested
     default:
         $adminAction = $_REQUEST['adminAction'] ?? null;
 
-        if ($adminAction) 
-        {
+        if ($adminAction) {
+            // Use the first matching route's response or `null` if no match
             $response = productRoutes($adminAction, $authMiddleware) ??
                 categoryRoutes($adminAction, $authMiddleware) ??
                 informationRoutes($adminAction, $authMiddleware) ??
@@ -84,4 +90,5 @@ switch ($action)
         break;
 }
 
+// Return the response as JSON to the client
 echo json_encode($response);

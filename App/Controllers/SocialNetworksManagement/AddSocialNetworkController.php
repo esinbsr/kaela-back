@@ -25,49 +25,50 @@ class AddSocialNetworkController
         $url = isset($data['url']) ? trim(strip_tags($data['url'])) : null;
 
         // Validate input
-        if (empty($platform) || empty($url)) 
-        {
+        if (empty($platform) || empty($url)) {
+            http_response_code(400); // Bad Request
             return ["success" => false, "message" => "Please complete all fields"];
         }
 
         // Check if the URL is valid
-        if (!filter_var($url, FILTER_VALIDATE_URL)) 
-        {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            http_response_code(400); // Bad Request
             return ["success" => false, "message" => "Invalid URL"];
         }
 
         // Uses the model function to check whether the platform and url are already in use
-        if ($this->model->existsInColumn('platform', $platform)) 
-        {
+        if ($this->model->existsInColumn('platform', $platform)) {
+            http_response_code(409); // Conflict
             return ["success" => false, "message" => "This social network name is already in use."];
         }
 
-        if ($this->model->existsInColumn('url', $url)) 
-        {
-            return ["success" => false, "message" => "This url is already in use."];
+        if ($this->model->existsInColumn('url', $url)) {
+            http_response_code(409); // Conflict
+            return ["success" => false, "message" => "This URL is already in use."];
         }
 
-
-        try 
-        {
+        try {
             // Use the model to insert the new social network
-            $id = $this->model->insertSocialNetwork($platform, $url);
+            $id = $this->model->addSocialNetwork($platform, $url);
+
+            $newSocialNetwork = [
+                'id' => $id,
+                'platform' => $platform,
+                'url' => $url
+            ];
 
             // Prepare the newly added social network data for the response
+            http_response_code(201); // Created
             return [
                 "success" => true,
-                "message" => "Social network added successfully!",
-                "socialNetwork" => [
-                    'id' => $id,
-                    'platform' => $platform,
-                    'url' => $url
-                ]
+                "message" => "Social network added successfully.",
+                "socialNetwork" => $newSocialNetwork
+
             ];
-        } 
-        catch (\PDOException $e) 
-        {
-            // Return a failure response in case of a database error
-            return ["success" => false, "message" => "Database error: " . $e->getMessage()];
+        } catch (\PDOException) {
+            // Return a failure response 
+            http_response_code(500); // Internal Server Error
+            return ["success" => false, "message" => "Database error"];
         }
     }
 }

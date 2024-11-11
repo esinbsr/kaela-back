@@ -4,7 +4,7 @@ namespace Models;
 
 use App\Database;
 
-class ContactModel 
+class ContactModel
 {
     protected $db;
 
@@ -12,7 +12,7 @@ class ContactModel
     public function __construct()
     {
         $database = new Database();
-        $this->db = $database->getConnection(); 
+        $this->db = $database->getConnection();
     }
 
     // Method to insert contact information into the database

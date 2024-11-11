@@ -17,21 +17,21 @@ class AddSocialNetworkModel
     }
 
     // Method to insert a new social network into the database
-    public function insertSocialNetwork($platform, $url)
+    public function addSocialNetwork($platform, $url)
     {
         $request = "INSERT INTO social_network (platform, url) VALUES (?, ?)";
         $pdo = $this->db->prepare($request);
         $pdo->execute([$platform, $url]);
 
-        // Return the ID of the newly inserted social network
+        // Return the newly inserted social network
         return $this->db->lastInsertId();
     }
-        // Check if a platform name and url already exists in the database
-        public function existsInColumn($column, $value)
-        {
-            $query = "SELECT COUNT(*) FROM social_network WHERE $column = ?";
-            $pdo = $this->db->prepare($query);
-            $pdo->execute([$value]);
-            return $pdo->fetchColumn() > 0;
-        }
+    // Check if a platform name and url already exists in the database
+    public function existsInColumn($column, $value)
+    {
+        $request = "SELECT COUNT(*) FROM social_network WHERE $column = ?";
+        $pdo = $this->db->prepare($request);
+        $pdo->execute([$value]);
+        return $pdo->fetchColumn() > 0;
+    }
 }
