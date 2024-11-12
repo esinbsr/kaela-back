@@ -77,7 +77,6 @@ CREATE TABLE `contact` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
 -- --------------------------------------------------------
 
 --
