@@ -19,7 +19,7 @@ class LoginController
     // Method to handle the user login process
     public function login()
     {
-        // Retrieve the input data (JSON format)
+        // Retrieve input data (JSON format)
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
 
@@ -33,34 +33,32 @@ class LoginController
             return ["success" => false, "message" => "All fields are required."];
         }
 
-        // Validate the email format
+        // Validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             http_response_code(400); // Bad Request
             return ["success" => false, "message" => "Invalid email format."];
         }
 
         try {
-            // Retrieve the user from the model
+            // Retrieve the user via the model
             $user = $this->model->getUserByEmail($email);
 
-            // Verify the password and check if the user exists
+            // Verify password and check if the user exists
             if ($user && password_verify($password, $user['password'])) {
-                // If credentials are valid, generate a JWT token
-                $token = $this->token->generateToken($user['id'], $user['role'], $user['username'], $user['email']);
+                // If credentials are valid, generate a JWT token with only user_id and role
+                $token = $this->token->generateToken($user['id'], $user['role']);
 
-                // Return a success response with the user details and JWT token
+                // Return a success response with the JWT token and minimal info
                 http_response_code(200); // OK
                 return [
                     "success" => true,
                     "message" => "Login successful.",
                     "role" => $user['role'],
                     "user_id" => $user['id'],
-                    "username" => $user['username'],
-                    "email" => $user["email"],
                     "token" => $token
                 ];
             } else {
-                // Return an error if the credentials are invalid
+                // Return an error if credentials are invalid
                 http_response_code(401); // Unauthorized
                 return ["success" => false, "message" => "Invalid credentials."];
             }
