@@ -24,6 +24,7 @@ class SignupController
         $username = isset($data['username']) ? strip_tags($data['username']) : null;
         $email = isset($data['email']) ? filter_var($data['email'], FILTER_SANITIZE_EMAIL) : null;
         $password = isset($data['password']) ? strip_tags($data['password']) : null;
+        $consent = isset($data['consent']) ? (bool)$data['consent'] : false; 
 
         // Check if any required field is missing
         if (empty($username) || empty($email) || empty($password)) {
@@ -35,6 +36,10 @@ class SignupController
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             http_response_code(400); // Bad Request
             return ["success" => false, "message" => "Invalid email"];
+        }
+
+        if (!$consent) {
+            return ["success" => false, "message" => "Veuillez accepter le consentement."];
         }
 
         try {
@@ -61,13 +66,14 @@ class SignupController
 
 
             // Insert the user into the database
-            $userId = $this->model->addUser($username, $email, $passwordHash);
+            $userId = $this->model->addUser($username, $email, $passwordHash, $consent);
 
             // Prepare the user data to return in the response
             $userData = [
                 'id' => $userId,
                 "username" => $username,
-                "email" => $email
+                "email" => $email,
+                "consent" => $consent
             ];
 
             // Return a success response with the user data

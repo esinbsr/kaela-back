@@ -16,12 +16,12 @@ class SignupModel
     }
 
     // Method to insert a new user into the database
-    public function addUser($username, $email, $passwordHash)
+    public function addUser($username, $email, $passwordHash, $consent)
     {
         // Insert the user data into the database
-        $request = "INSERT INTO user (username, email, password, last_active_at) VALUES (?,?,?, NOW())";
+        $request = "INSERT INTO user (username, email, password, last_active_at, consent) VALUES (?,?,?, NOW(), ?)";
         $pdo = $this->db->prepare($request);
-        $pdo->execute([$username, $email, $passwordHash]);
+        $pdo->execute([$username, $email, $passwordHash, $consent]);
 
         return $this->db->lastInsertId(); // Return the newly inserted user ID
     }
