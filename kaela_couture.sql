@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : mar. 12 nov. 2024 à 17:07
+-- Généré le : ven. 17 oct. 2025 à 11:36
 -- Version du serveur : 5.7.39
 -- Version de PHP : 8.2.0
 
@@ -61,6 +61,20 @@ CREATE TABLE `comment` (
   `is_archived` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `comment`
+--
+
+INSERT INTO `comment` (`id`, `content`, `created_at`, `updated_at`, `user_id`, `product_id`, `is_archived`) VALUES
+(1, 'beau\n', '2024-11-13 10:41:17', '2024-11-13 10:41:17', 1, 53, 0),
+(2, 'beau\n', '2024-11-13 10:41:19', '2024-11-13 10:41:19', 1, 53, 0),
+(3, 'beau', '2024-11-13 10:42:36', '2024-11-13 10:49:22', 1, 54, 1),
+(4, 'gdgds', '2024-11-13 19:08:41', '2024-11-13 19:08:41', 1, 54, 0),
+(5, 'gfdgfdg\ngrdgrgr', '2024-11-13 19:09:01', '2024-11-13 19:09:05', 1, 54, 0),
+(6, 'd', '2024-11-18 15:42:15', '2024-11-18 15:42:15', 1, 55, 0),
+(7, 'fefeffefefe', '2025-06-12 11:28:10', '2025-06-12 11:28:17', 4, 55, 1),
+(8, 'salut', '2025-10-16 14:46:45', '2025-10-16 14:46:45', 5, 54, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -76,6 +90,51 @@ CREATE TABLE `contact` (
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `contact`
+--
+
+INSERT INTO `contact` (`id`, `email`, `object`, `message`, `date_send_msg`, `user_id`) VALUES
+(2, 'fefe@gmail.com', 'fzefze', 'feze', '2024-08-21 19:30:59', NULL),
+(3, 'hokablese@gmail.com', 'gerg', 'ege', '2024-09-27 17:50:08', NULL),
+(4, 'fefefefef@gmail.com', 'frefef', 'efer', '2024-09-27 18:03:23', NULL),
+(5, 'esinbaser@gmail.com', 'fe', 'zfz', '2024-09-27 18:06:37', NULL),
+(6, 'esinbaser@gmail.f', 'fe', 'zfz', '2024-09-27 18:07:07', NULL),
+(7, 'esinbaser@gmail.f', 'fe', 'zfz', '2024-09-27 18:07:09', NULL),
+(8, 'efefeablese@gmail.com', 'fef', 'efe', '2024-09-27 18:07:21', NULL),
+(9, 'hokablese@gmail.com', 'dd', 'dd', '2024-09-27 18:08:49', NULL),
+(10, 'hzbdjvz@gmail.com', 'erz', 'ezerz', '2024-09-27 18:10:24', NULL),
+(11, 'hokablese@gmail.com', 'e\"e', '\"e\"e', '2024-09-27 18:11:57', NULL),
+(12, 'hokablese@gmail.com', 'e\"e\"', 'e\"e\"', '2024-09-27 18:17:40', NULL),
+(13, 'dzdz@gmail.com', 'cdcd', 'cdcd', '2024-10-16 15:58:44', NULL),
+(14, 'hokablese@gmail.com', 'dedede', 'ded', '2024-10-16 15:59:10', NULL),
+(15, 'hokablese@gmail.com', 'ded', 'de', '2024-10-16 16:11:22', NULL),
+(16, 'esin@gmail.com', 'dede', 'frf', '2024-10-16 16:28:27', NULL),
+(17, 'esin@gmail.com', 'ee', 'ee', '2024-10-16 17:03:13', NULL),
+(18, 'esin@gmail.com', 'dede', 'frf', '2024-10-16 17:03:43', NULL),
+(19, 'esin@gmail.com', 'dede', 'rr', '2024-10-16 17:05:28', 4),
+(20, 'hokablese@gmail.com', 'r', 'r\"r\"', '2024-10-16 17:05:45', NULL),
+(21, 'esin@gmail.com', 'dede', 'ded', '2024-10-16 17:06:10', 4),
+(22, 'esin@gmail.com', 'zolo', 'f', '2024-10-16 17:14:26', 4),
+(23, 'hokablese@gmail.com', 'fff', 'ff', '2024-10-16 17:14:43', NULL),
+(24, 'esin@gmail.com', 'hihi', 'vdvd', '2024-10-16 17:25:59', 4),
+(25, 'esin@gmail.com', 'dede', 's', '2024-10-18 17:17:50', 4),
+(26, 'hihihi@gmail.com', 'salut', 'f', '2024-10-25 12:09:42', 6),
+(27, 'esin@gmail.com', 'lol', 'fefe', '2024-10-25 12:12:53', NULL),
+(28, 'ddede@gmail.com', 'dezde', 'dedededed', '2024-10-25 12:28:58', NULL),
+(29, 'esin@gmail.com', 'frfre', 'fer', '2024-10-25 15:31:50', NULL),
+(30, 'esin@gmail.com', 'ded', 'edd', '2024-10-25 15:33:37', 4),
+(31, 'esin@gmail.com', 'dede', 'fef', '2024-11-11 13:51:42', 1),
+(32, 'esin@gmail.com', 'dede', 'fef', '2024-11-11 13:54:57', 1),
+(33, 'esin@gmail.com', 'v', 'v', '2024-11-11 13:56:56', 1),
+(34, 'esin@gmail.com', 'frfre', 'frefre', '2024-11-11 14:00:08', 1),
+(35, 'hokablese@gmail.com', 'fefefe', 'fefefe', '2024-11-11 14:01:04', NULL),
+(36, 'esin@gmail.com', 'dede', 'dede', '2024-11-11 14:01:20', NULL),
+(37, 'esin@gmail.com', 'e\"ée', 'ee\"é', '2024-11-11 14:01:51', 1),
+(38, 'esin@gmail.com', 'FREFER', 'FREFER', '2024-11-11 14:02:20', 1),
+(39, 'esin@gmail.com', 'fr', 'fr', '2024-11-11 14:02:27', 1),
+(40, 'esin@gmail.com', 'd', 'de', '2024-11-11 14:02:55', 1),
+(41, 'esin@gmail.com', 'frvvr', 'vr', '2024-11-11 14:06:29', 1);
 
 -- --------------------------------------------------------
 
@@ -207,8 +266,20 @@ CREATE TABLE `user` (
   `password` varchar(150) NOT NULL,
   `date_register` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `role` varchar(20) DEFAULT 'user',
-  `last_active_at` datetime DEFAULT NULL
+  `last_active_at` datetime DEFAULT NULL,
+  `consent` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `email`, `password`, `date_register`, `role`, `last_active_at`, `consent`) VALUES
+(1, 'esin', 'esin@gmail.com', '$argon2id$v=19$m=65536,t=4,p=1$WmRKc1FtTjFzaTRoUVFSUA$wwJv0k093/7Ic+pwytI33Z798Wqkf+87WY0Mys1ntjU', '2024-11-13 10:42:25', 'admin', '2024-11-13 10:42:25', 0),
+(2, 'ffesin', 'hokablese@gmail.com', '$argon2id$v=19$m=65536,t=4,p=1$Ly9nWmVVdEFRT0FWS0VZTg$bpD64VOfxeN/4NI/UrwYPrDB3ZA6AgZWbnMFPrFfbbI', '2024-11-18 19:14:23', 'user', '2024-11-18 19:14:23', 1),
+(3, 'esinbaser', 'esinbaser@gmail.com', '$argon2id$v=19$m=65536,t=4,p=1$QXpnOXFPU2JrYkxHN3d5ag$KSBgUREx7sgoAj6UEUK/0YuIPtZO4j0BIH1Il/d6csM', '2024-11-18 20:27:17', 'user', '2024-11-18 20:27:17', 1),
+(4, 'ohayo', 'ohayo@gmail.com', '$argon2id$v=19$m=65536,t=4,p=1$VjAxU0dnb3ltSVNQYnp3Zw$4F+SYT8FqTV6UJWJ9El4vZE7pnnbXB1dKUrZ+BN3yYI', '2025-06-12 11:27:55', 'user', '2025-06-12 11:27:55', 1),
+(5, 'memo', 'memo@gmail.com', '$argon2id$v=19$m=65536,t=4,p=1$NGlWeUVtTHBKV2J4cXdULg$+f99Ub8RMzgeq6R3epxPQqLKdzFA8IRpFRyhacC02/U', '2025-10-16 14:46:29', 'user', '2025-10-16 14:46:29', 1);
 
 --
 -- Index pour les tables déchargées
@@ -281,13 +352,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `categorie`
 --
 ALTER TABLE `categorie`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `contact`
@@ -299,7 +370,7 @@ ALTER TABLE `contact`
 -- AUTO_INCREMENT pour la table `information`
 --
 ALTER TABLE `information`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `product`
@@ -317,13 +388,13 @@ ALTER TABLE `section`
 -- AUTO_INCREMENT pour la table `social_network`
 --
 ALTER TABLE `social_network`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Contraintes pour les tables déchargées
