@@ -1,7 +1,7 @@
 <?php
 
 // Set headers to allow cross-origin requests and define which headers and methods are permitted
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Allows requests from any origin
+header("Access-Control-Allow-Origin: *"); // Allows requests from any origin
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Specifies which headers are allowed in requests
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE"); // Lists the HTTP methods allowed
 header("Content-Type: application/json"); // Sets the content type of the response to JSON
